@@ -4,4 +4,5 @@ from sqlalchemy.ext.declarative import declarative_base
 class Base(declarative_base):
     pass
 
-db = SQLAlchemy(model_class=Base)
+db = SQLAlchemy()
+Base = declarative_base()
