@@ -1,0 +1,682 @@
+swagger: '2.0'
+info:
+  title: 'M13 Mini Project'
+  description: 'API for M13 Mini Project'
+  version: '1.0.0'
+host: '127.0.0.1:5000'
+schemes:
+  - 'http'
+consumes:
+  - 'application/json'
+produces:
+  - 'application/json'
+paths:
+  /customers:
+    get:
+      tags:
+        - 'customers'
+      summary: 'Get all customers'
+      description: 'Endpoint for getting all customers'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+      responses:
+        200:
+          description: 'Customers retrieved'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer/create:
+    post:
+      tags:
+        - 'customers'
+      summary: 'Create a customer'
+      description: 'Endpoint for creating a customer'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'Customer data'
+          required: true
+          schema:
+            $ref: '#/definitions/customer'
+      responses:
+        200:
+          description: 'Customer created successfully'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer/<customer_id>:
+    get:
+      tags:
+        - 'customers'
+      summary: 'Get a customer'
+      description: 'Endpoint for getting a customer'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'customer_id'
+          description: 'Customer ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Customer retrieved'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer/update/<customer_id>:
+    put:
+      tags:
+        - 'customers'
+      summary: 'Update a customer'
+      description: 'Endpoint for updating a customer'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'customer_id'
+          description: 'Customer ID'
+          required: true
+          type: 'integer'
+        - in: 'body'
+          name: 'body'
+          description: 'Customer data'
+          required: true
+          schema:
+            $ref: '#/definitions/customer'
+      responses:
+        200:
+          description: 'Customer updated successfully'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer/delete/<customer_id>:
+    delete:
+      tags:
+        - 'customers'
+      summary: 'Delete a customer'
+      description: 'Endpoint for deleting a customer'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'customer_id'
+          description: 'Customer ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Customer deleted successfully'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /order/create:
+    post:
+      tags:
+        - 'order'
+      summary: 'Create an order'
+      description: 'Endpoint for creating an order'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'Order data'
+          required: true
+          schema:
+            $ref: '#/definitions/order'
+      responses:
+        200:
+          description: 'Order created successfully'
+          schema:
+            $ref: '#/definitions/order'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /orders:
+    get:
+      tags:
+        - 'order'
+      summary: 'Get all orders'
+      description: 'Endpoint for getting all orders'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+      responses:
+        200:
+          description: 'Orders retrieved'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/order'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /order/<order_id>:
+    get:
+      tags:
+        - 'order'
+      summary: 'Get an order'
+      description: 'Endpoint  for getting an order'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'order_id'
+          description: 'Order ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Order retrieved'
+          schema:
+            $ref: '#/definitions/order'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /order/update/<order_id>:
+    put:
+      tags:
+        - 'order'
+      summary: 'Update an order'
+      description: 'Endpoint for updating an order'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'order_id'
+          description: 'Order ID'
+          required: true
+          type: 'integer'
+        - in: 'body'
+          name: 'body'
+          description: 'Order data'
+          required: true
+          schema:
+            $ref: '#/definitions/order'
+      responses:
+        200:
+          description: 'Order updated successfully'
+          schema:
+            $ref: '#/definitions/order'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /order/delete/<order_id>:
+    delete:
+      tags:
+        - 'order'
+      summary: 'Delete an order'
+      description: 'Endpoint for deleting an order'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'order_id'
+          description: 'Order ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Order deleted successfully'
+          schema:
+            $ref: '#/definitions/order'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /product/create:
+    post:
+      tags:
+        - 'product'
+      summary: 'Create a product'
+      description: 'Endpoint for creating a product'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'Product data'
+          required: true
+          schema:
+            $ref: '#/definitions/product'
+      responses:
+        200:
+          description: 'Product created successfully'
+          schema:
+            $ref: '#/definitions/product'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /products:
+    get:
+      tags:
+        - 'product'
+      summary: 'Get all products'
+      description: 'Endpoint for getting all products'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+      responses:
+        200:
+          description: 'Products retrieved'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/product'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /product/<product_id>:
+    get:
+      tags:
+        - 'product'
+      summary: 'Get a product'
+      description: 'Endpoint for getting a product'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'product_id'
+          description: 'Product ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Product retrieved'
+          schema:
+            $ref: '#/definitions/product'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /product/update/<product_id>:
+    put:
+      tags:
+        - 'product'
+      summary: 'Update a product'
+      description: 'Endpoint for updating a product'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'product_id'
+          description: 'Product ID'
+          required: true
+          type: 'integer'
+        - in: 'body'
+          name: 'body'
+          description: 'Product data'
+          required: true
+          schema:
+            $ref: '#/definitions/product'
+      responses:
+        200:
+          description: 'Product updated successfully'
+          schema:
+            $ref: '#/definitions/product'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /product/delete/<product_id>:
+    delete:
+      tags:
+        - 'product'
+      summary: 'Delete a product'
+      description: 'Endpoint for deleting a product'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'product_id'
+          description: 'Product ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Product deleted successfully'
+          schema:
+            $ref: '#/definitions/product'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer-accounts/create:
+    post:
+      tags:
+        - 'customer-accounts'
+      summary: 'Create a customer account'
+      description: 'Endpoint for creating a customer account'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'Customer data'
+          required: true
+          schema:
+            $ref: '#/definitions/customer'
+      responses:
+        200:
+          description: 'Customer account created successfully'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer-accounts:
+    get:
+      tags:
+        - 'customer-accounts'
+      summary: 'Get all customer accounts'
+      description: 'Endpoint for getting all customer accounts'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+      responses:
+        200:
+          description: 'Customer accounts retrieved'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer-accounts/<id>:
+    get:
+      tags:
+        - 'customer-accounts'
+      summary: 'Get a customer account'
+      description: 'Endpoint for getting a customer account'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'id'
+          description: 'Customer ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Customer account retrieved'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer-accounts/update/<id>:
+    put:
+      tags:
+        - 'customer-accounts'
+      summary: 'Update a customer account'
+      description: 'Endpoint for updating a customer account'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'id'
+          description: 'Customer ID'
+          required: true
+          type: 'integer'
+        - in: 'body'
+          name: 'body'
+          description: 'Customer data'
+          required: true
+          schema:
+            $ref: '#/definitions/customer'
+      responses:
+        200:
+          description: 'Customer account updated successfully'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+  /customer-accounts/delete/<id>:
+    delete:
+      tags:
+        - 'customer-accounts'
+      summary: 'Delete a customer account'
+      description: 'Endpoint for deleting a customer account'
+      parameters:
+        - in: 'header'
+          name: 'Authorization'
+          description: 'Bearer token for authorization'
+          type: 'string'
+        - in: 'path'
+          name: 'id'
+          description: 'Customer ID'
+          required: true
+          type: 'integer'
+      responses:
+        200:
+          description: 'Customer account deleted successfully'
+          schema:
+            $ref: '#/definitions/customer'
+        401:
+          description: 'Unauthorized'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'token is missing | invalid token'
+definitions:
+  production:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        description: 'Production ID'
+      product_id:
+        type: 'integer'
+        description: 'Product ID'
+      quantity_produced:
+        type: 'integer'
+        description: 'Quantity of products'
+      date_produced:
+        type: 'string'
+        description: 'Date of production'
+    required:
+      - 'id'
+      - 'product_id'
+      - 'quantity_produced'
+      - 'date_produced'
+  product:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        description: 'Product ID'
+      name:
+        type: 'string'
+        description: 'Product name'
+      price:
+        type: 'float'
+        description: 'Product price'
+    required:
+      - 'id'
+      - 'name'
+      - 'price'
+  order:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        description: 'Order ID'
+      customer_id:
+        type: 'integer'
+        description: 'Customer ID'
+      employee_id:
+        type: 'integer'
+        description: 'Employee ID'
+      quantity:
+        type: 'integer'
+        description: 'Quantity of products'
+      total_price:
+        type: 'float'
+        description: 'Total price of the order'
+    required:
+      - 'id'
+      - 'customer_id'
+      - 'employee_id'
+      - 'quantity'
+      - 'total_price'
+  employee:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        description: 'Employee ID'
+      name:
+        type: 'string'
+        description: 'Employee name'
+      position:
+        type: 'string'
+        description: 'Employee position'
+    required:
+      - 'id'
+      - 'name'
+      - 'position'
+  customer:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        description: 'Customer ID'
+      name:
+        type: 'string'
+        description: 'Customer name'
+      email:
+        type: 'string'
+        description: 'Customer email'
+    required:
+      - 'id'
+      - 'name'
+      - 'email'
