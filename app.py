@@ -7,6 +7,9 @@ from sqlalchemy.orm import Session
 from flask_swagger_ui import get_swaggerui_blueprint
 from config import DevelopmentConfig
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Blueprint Imports
 from routes.customerAccountBP import customer_account_blue_print
 from routes.orderBP import order_blue_print
