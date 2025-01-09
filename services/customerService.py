@@ -17,16 +17,20 @@ def find_customer_by_id(customer_id):
     except Exception as e:
         print(f"Error fetching customer by ID: {e}")
         return None
-
-def create_customer(customer):
+    
+def create_customer(data):
     try:
-        db.session.add(customer)
+        new_customer = Customer(name=data['name'], email=data['email'])
+
+        db.session.add(new_customer)
         db.session.commit()
-        return customer
+        db.session.refresh(new_customer)
+
+        return new_customer
     except Exception as e:
         db.session.rollback()
-        print(f"Error creating customer: {e}")
-        return None
+        raise e
+
 
 def update_customer(customer_id, customer_data):
     try:
