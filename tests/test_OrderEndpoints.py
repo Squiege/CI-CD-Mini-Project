@@ -8,7 +8,7 @@ from services.orderService import (
     delete_order,  
 )
 from models.order import Order
-from app import app
+from flask import current_app as app
 
 
 class TestOrderService(unittest.TestCase):

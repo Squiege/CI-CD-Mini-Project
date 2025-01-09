@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from services.productService import create_product, find_product_by_id, find_all_products, update_product, delete_product
 from models.product import Product
-from app import app
+from flask import current_app as app
 
 class TestProductService(unittest.TestCase):
     def setUp(self):

@@ -8,7 +8,7 @@ from services.customerService import (
     delete_customer,  
 )
 from models.customer import Customer
-from app import app
+from flask import current_app as app
 
 
 class TestCustomerService(unittest.TestCase):
