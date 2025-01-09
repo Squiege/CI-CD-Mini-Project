@@ -52,14 +52,22 @@ class TestProductService(unittest.TestCase):
         mock_session.refresh = MagicMock()
 
         mock_product_data = {'name': 'Product A', 'price': 10.99}
-        mock_product = Product(id=1, **mock_product_data)
+        mock_product = Product(**mock_product_data)  
+
+
         mock_session.refresh.return_value = mock_product
 
-        created_product = create_product(mock_product_data)
 
+        with patch('services.productService.Product', return_value=mock_product):
+            created_product = create_product(mock_product_data)
+
+    
         mock_session.add.assert_called_once_with(mock_product)
         mock_session.commit.assert_called_once()
         mock_session.refresh.assert_called_once_with(mock_product)
+        self.assertEqual(created_product.name, 'Product A')
+        self.assertEqual(created_product.price, 10.99)
+
 
     @patch('services.productService.db.session')
     def test_update_product(self, mock_session):

@@ -52,16 +52,19 @@ class TestCustomerService(unittest.TestCase):
         mock_session.refresh = MagicMock()
 
         mock_customer_data = {'name': 'Alice Johnson', 'email': 'alice.johnson@example.com'}
-        mock_customer = Customer(id=1, **mock_customer_data)
+        mock_customer = Customer(**mock_customer_data)
+
         mock_session.refresh.return_value = mock_customer
 
-        created_customer = create_customer(mock_customer_data)
+        with patch('services.customerService.Customer', return_value=mock_customer):
+            created_customer = create_customer(mock_customer_data)
 
         mock_session.add.assert_called_once_with(mock_customer)
         mock_session.commit.assert_called_once()
         mock_session.refresh.assert_called_once_with(mock_customer)
         self.assertEqual(created_customer.name, 'Alice Johnson')
         self.assertEqual(created_customer.email, 'alice.johnson@example.com')
+
 
     @patch('services.customerService.db.session')
     def test_update_customer(self, mock_session):
