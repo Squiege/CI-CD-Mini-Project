@@ -8,18 +8,18 @@ from services.customerService import (
     delete_customer,
 )
 from models.customer import Customer
-from app import app 
+from app import app
 
 
 class TestCustomerService(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()  
+        self.app_context = app.app_context()  # Set up app context
         self.app_context.push()
 
     def tearDown(self):
-        self.app_context.pop()  
+        self.app_context.pop()  # Pop the app context after each test
 
-    @patch('services.customerService.db.session')  
+    @patch('services.customerService.db.session')
     def test_find_all_customers(self, mock_session):
         mock_customer1 = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_customer2 = Customer(id=2, name='Bob Smith', email='bob@example.com')
@@ -31,7 +31,7 @@ class TestCustomerService(unittest.TestCase):
         self.assertEqual(customers[0].name, 'Alice Johnson')
         self.assertEqual(customers[1].email, 'bob@example.com')
 
-    @patch('services.customerService.db.session')  
+    @patch('services.customerService.db.session')
     def test_find_customer_by_id(self, mock_session):
         mock_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_customer
@@ -42,7 +42,7 @@ class TestCustomerService(unittest.TestCase):
         self.assertEqual(customer.name, 'Alice Johnson')
         self.assertEqual(customer.email, 'alice@example.com')
 
-    @patch('services.customerService.db.session')  
+    @patch('services.customerService.db.session')
     def test_create_customer(self, mock_session):
         mock_customer_data = {'name': 'Alice Johnson', 'email': 'alice.johnson@example.com'}
         mock_customer = Customer(id=1, **mock_customer_data)
@@ -54,13 +54,13 @@ class TestCustomerService(unittest.TestCase):
 
         created_customer = create_customer(mock_customer_data)
 
-        mock_session.add.assert_called_once()
+        mock_session.add.assert_called_once_with(mock_customer)
         mock_session.commit.assert_called_once()
-        mock_session.refresh.assert_called_once()
+        mock_session.refresh.assert_called_once_with(mock_customer)
         self.assertEqual(created_customer.name, 'Alice Johnson')
         self.assertEqual(created_customer.email, 'alice.johnson@example.com')
 
-    @patch('services.customerService.db.session')  
+    @patch('services.customerService.db.session')
     def test_update_customer(self, mock_session):
         mock_existing_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_customer
@@ -73,7 +73,7 @@ class TestCustomerService(unittest.TestCase):
         self.assertEqual(updated_customer.email, 'updated@example.com')
         mock_session.commit.assert_called_once()
 
-    @patch('services.customerService.db.session')  
+    @patch('services.customerService.db.session')
     def test_delete_customer(self, mock_session):
         mock_existing_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_customer

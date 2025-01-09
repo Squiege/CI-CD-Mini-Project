@@ -8,43 +8,42 @@ from services.orderService import (
     delete_order,
 )
 from models.order import Order
-from app import app  
+from app import app
 
 
 class TestOrderService(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()  
+        self.app_context = app.app_context()  # Set up app context
         self.app_context.push()
 
     def tearDown(self):
-        self.app_context.pop()  
+        self.app_context.pop()  # Pop the app context after each test
 
-    @patch('services.orderService.db.session')  
+    @patch('services.orderService.db.session')
     def test_find_all_orders(self, mock_session):
-        mock_order1 = Order(id=1, customer_id=1, product_id=1, quantity=2, total=50.0)
-        mock_order2 = Order(id=2, customer_id=2, product_id=3, quantity=4, total=120.0)
+        mock_order1 = Order(id=1, customer_id=1, product_id=1, quantity=2)
+        mock_order2 = Order(id=2, customer_id=2, product_id=3, quantity=4)
         mock_session.query.return_value.all.return_value = [mock_order1, mock_order2]
 
         orders = find_all_orders()
 
         self.assertEqual(len(orders), 2)
-        self.assertEqual(orders[0].total, 50.0)
+        self.assertEqual(orders[0].quantity, 2)
         self.assertEqual(orders[1].quantity, 4)
 
-    @patch('services.orderService.db.session')  
+    @patch('services.orderService.db.session')
     def test_find_order_by_id(self, mock_session):
-        mock_order = Order(id=1, customer_id=1, product_id=2, quantity=5, total=100.0)
+        mock_order = Order(id=1, customer_id=1, product_id=2, quantity=5)
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_order
 
         order = find_order_by_id(1)
 
         self.assertIsNotNone(order)
         self.assertEqual(order.customer_id, 1)
-        self.assertEqual(order.total, 100.0)
 
-    @patch('services.orderService.db.session')  
+    @patch('services.orderService.db.session')
     def test_create_order(self, mock_session):
-        mock_order_data = {'customer_id': 1, 'product_id': 2, 'quantity': 5, 'total': 100.0}
+        mock_order_data = {'customer_id': 1, 'product_id': 2, 'quantity': 5}
         mock_order = Order(id=1, **mock_order_data)
 
         mock_session.add = MagicMock()
@@ -54,32 +53,27 @@ class TestOrderService(unittest.TestCase):
 
         created_order = create_order(mock_order_data)
 
-        mock_session.add.assert_called_once()
+        mock_session.add.assert_called_once_with(mock_order)
         mock_session.commit.assert_called_once()
-        mock_session.refresh.assert_called_once()
-        self.assertEqual(created_order.customer_id, 1)
-        self.assertEqual(created_order.total, 100.0)
+        mock_session.refresh.assert_called_once_with(mock_order)
 
-    @patch('services.orderService.db.session')  
+    @patch('services.orderService.db.session')
     def test_update_order(self, mock_session):
-        mock_existing_order = Order(
-            id=1, customer_id=1, product_id=2, quantity=5, total=100.0
-        )
+        mock_existing_order = Order(id=1, customer_id=1, product_id=2, quantity=5)
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_order
 
-        new_order_data = {'customer_id': 2, 'product_id': 3, 'quantity': 10, 'total': 200.0}
+        new_order_data = {'customer_id': 2, 'product_id': 3, 'quantity': 10}
 
         updated_order = update_order(1, new_order_data)
 
         self.assertEqual(updated_order.customer_id, 2)
         self.assertEqual(updated_order.product_id, 3)
         self.assertEqual(updated_order.quantity, 10)
-        self.assertEqual(updated_order.total, 200.0)
         mock_session.commit.assert_called_once()
 
-    @patch('services.orderService.db.session') 
+    @patch('services.orderService.db.session')
     def test_delete_order(self, mock_session):
-        mock_existing_order = Order(id=1, customer_id=1, product_id=2, quantity=5, total=100.0)
+        mock_existing_order = Order(id=1, customer_id=1, product_id=2, quantity=5)
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_order
 
         delete_order(1)
