@@ -1,28 +1,37 @@
-from sqlalchemy import select
+from sqlalchemy.orm import Session
 from models.product import Product
 from database import db
 
 def find_all_products():
-    query = select(Product)
-    return db.execute(query).scalars().all()
+    with db.session as session:  
+        query = session.query(Product)
+        return query.all()
 
 def find_product_by_id(product_id):
-    query = select(Product).filter(Product.id == product_id)
-    return db.execute(query).scalar()
+    with db.session as session:
+        return session.query(Product).filter_by(id=product_id).first()
 
-def create_product(product):
-    db.add(product)
-    db.commit()
+def create_product(product_data):
+    with db.session as session:
+        new_product = Product(**product_data)  
+        session.add(new_product)
+        session.commit()
+        session.refresh(new_product)  
+        return new_product
 
-def update_product(product_id, product):
-    query = select(Product).filter(Product.id == product_id)
-    existing_product = db.execute(query).scalar()
-    existing_product.name = product.name
-    existing_product.price = product.price
-    db.commit()
+def update_product(product_id, product_data):
+    with db.session as session:
+        existing_product = session.query(Product).filter_by(id=product_id).first()
+        if existing_product:
+            existing_product.name = product_data['name']
+            existing_product.price = product_data['price']
+            session.commit()
+            session.refresh(existing_product)  
+        return existing_product
 
 def delete_product(product_id):
-    query = select(Product).filter(Product.id == product_id)
-    existing_product = db.execute(query).scalar()
-    db.delete(existing_product)
-    db.commit()
+    with db.session as session:
+        existing_product = session.query(Product).filter_by(id=product_id).first()
+        if existing_product:
+            session.delete(existing_product)
+            session.commit()

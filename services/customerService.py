@@ -1,29 +1,38 @@
-from sqlalchemy import select
+from sqlalchemy.orm import Session
 from models.customer import Customer
 from database import db
 
 def find_all_customers():
-    query = select(Customer)
-    return db.execute(query).scalars().all()
+    with db.session as session:  
+        return session.query(Customer).all()
 
 def find_customer_by_id(customer_id):
-    query = select(Customer).filter(Customer.id == customer_id)
-    return db.execute(query).scalar()
+    with db.session as session:
+        return session.query(Customer).filter_by(id=customer_id).first()
 
-def create_customer(customer):
-    db.add(customer)
-    db.commit()
+def create_customer(customer_data):
+    with db.session as session:
+        new_customer = Customer(**customer_data)  
+        session.add(new_customer)
+        session.commit()
+        session.refresh(new_customer)  
+        return new_customer
 
-def update_customer(customer_id, customer):
-    query = select(Customer).filter(Customer.id == customer_id)
-    existing_customer = db.execute(query).scalar()
-    existing_customer.name = customer.name
-    existing_customer.email = customer.email
-    db.commit()
+def update_customer(customer_id, customer_data):
+    with db.session as session:
+        existing_customer = session.query(Customer).filter_by(id=customer_id).first()
+        if existing_customer:
+            existing_customer.name = customer_data['name']
+            existing_customer.email = customer_data['email']
+            session.commit()
+            session.refresh(existing_customer)  
+        return existing_customer
 
 def delete_customer(customer_id):
-    query = select(Customer).filter(Customer.id == customer_id)
-    existing_customer = db.execute(query).scalar()
-    db.delete(existing_customer)
-    db.commit()
+    with db.session as session:
+        existing_customer = session.query(Customer).filter_by(id=customer_id).first()
+        if existing_customer:
+            session.delete(existing_customer)
+            session.commit()
+
 
