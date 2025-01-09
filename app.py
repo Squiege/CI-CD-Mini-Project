@@ -116,6 +116,16 @@ def init_roles_customers_data():
             session.add_all(roles_customers)
             print("Customer management roles initialized successfully.")
 
+from sqlalchemy import create_engine
+
+def test_database_connection(uri):
+    try:
+        engine = create_engine(uri)
+        with engine.connect() as connection:
+            result = connection.execute("SELECT 1")
+            print("Database connection successful:", result.fetchone())
+    except Exception as e:
+        print("Database connection failed:", str(e))
 
 app = create_app()
 
