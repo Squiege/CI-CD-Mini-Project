@@ -3,36 +3,56 @@ from models.customer import Customer
 from database import db
 
 def find_all_customers():
-    with db.session as session:  
-        return session.query(Customer).all()
+    try:
+        customers = db.session.query(Customer).all()
+        return customers
+    except Exception as e:
+        print(f"Error fetching customers: {e}")
+        return []
 
 def find_customer_by_id(customer_id):
-    with db.session as session:
-        return session.query(Customer).filter_by(id=customer_id).first()
+    try:
+        customer = db.session.query(Customer).filter_by(id=customer_id).first()
+        return customer
+    except Exception as e:
+        print(f"Error fetching customer by ID: {e}")
+        return None
 
-def create_customer(customer_data):
-    with db.session as session:
-        new_customer = Customer(**customer_data)  
-        session.add(new_customer)
-        session.commit()
-        session.refresh(new_customer)  
-        return new_customer
+def create_customer(customer):
+    try:
+        db.session.add(customer)
+        db.session.commit()
+        return customer
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating customer: {e}")
+        return None
 
 def update_customer(customer_id, customer_data):
-    with db.session as session:
-        existing_customer = session.query(Customer).filter_by(id=customer_id).first()
-        if existing_customer:
-            existing_customer.name = customer_data['name']
-            existing_customer.email = customer_data['email']
-            session.commit()
-            session.refresh(existing_customer)  
-        return existing_customer
+    try:
+        customer = db.session.query(Customer).filter_by(id=customer_id).first()
+        if customer:
+            customer.name = customer_data.get('name', customer.name)
+            customer.email = customer_data.get('email', customer.email)
+            db.session.commit()
+            return customer
+        return None
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating customer: {e}")
+        return None
 
 def delete_customer(customer_id):
-    with db.session as session:
-        existing_customer = session.query(Customer).filter_by(id=customer_id).first()
-        if existing_customer:
-            session.delete(existing_customer)
-            session.commit()
+    try:
+        customer = db.session.query(Customer).filter_by(id=customer_id).first()
+        if customer:
+            db.session.delete(customer)
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error deleting customer: {e}")
+        return False
 
 
