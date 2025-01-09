@@ -13,15 +13,15 @@ from app import app
 
 class TestCustomerService(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()  # Set up app context
+        self.app_context = app.app_context()
         self.app_context.push()
 
     def tearDown(self):
-        self.app_context.pop()  # Pop the app context after each test
+        self.app_context.pop()
 
     @patch('services.customerService.db.session')
     def test_find_all_customers(self, mock_session):
-        # Mock query results
+        mock_session.__enter__.return_value = mock_session
         mock_customer1 = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_customer2 = Customer(id=2, name='Bob Smith', email='bob@example.com')
         mock_session.query.return_value.all.return_value = [mock_customer1, mock_customer2]
@@ -34,7 +34,7 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_find_customer_by_id(self, mock_session):
-        # Mock query result
+        mock_session.__enter__.return_value = mock_session
         mock_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_customer
 
@@ -46,13 +46,13 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_create_customer(self, mock_session):
-        # Mock input and expected behavior
-        mock_customer_data = {'name': 'Alice Johnson', 'email': 'alice.johnson@example.com'}
-        mock_customer = Customer(id=1, **mock_customer_data)
-
+        mock_session.__enter__.return_value = mock_session
         mock_session.add = MagicMock()
         mock_session.commit = MagicMock()
         mock_session.refresh = MagicMock()
+
+        mock_customer_data = {'name': 'Alice Johnson', 'email': 'alice.johnson@example.com'}
+        mock_customer = Customer(id=1, **mock_customer_data)
         mock_session.refresh.return_value = mock_customer
 
         created_customer = create_customer(mock_customer_data)
@@ -65,6 +65,7 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_update_customer(self, mock_session):
+        mock_session.__enter__.return_value = mock_session
         mock_existing_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_customer
 
@@ -78,6 +79,7 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_delete_customer(self, mock_session):
+        mock_session.__enter__.return_value = mock_session
         mock_existing_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_customer
 
