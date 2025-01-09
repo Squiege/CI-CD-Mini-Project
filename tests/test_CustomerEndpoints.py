@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from services.customerService import create_customer
 from models.customer import Customer
-from app import app
+from flask import current_app as app
 
 class TestCustomerService(unittest.TestCase):
     @patch('services.customerService.Session')  

@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from services.productService import create_product, find_product_by_id
 from models.product import Product
-from app import app
+from flask import current_app as app
 
 class TestProductService(unittest.TestCase):
     @patch('services.productService.Session')  

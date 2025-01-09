@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from services.orderService import create_order, find_order_by_id
 from models.order import Order
-from app import app
+from flask import current_app as app
 
 class TestOrderService(unittest.TestCase):
     @patch('services.orderService.Session')  
