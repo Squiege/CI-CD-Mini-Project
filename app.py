@@ -44,6 +44,7 @@ def create_app(config=DevelopmentConfig):
     blue_print_config(app)  
     configure_rate_limit()
 
+    # Get all routes
     @app.route('/routes', methods=['GET'])
     def list_routes():
         routes = []
