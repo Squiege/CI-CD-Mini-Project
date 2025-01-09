@@ -21,6 +21,7 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_find_all_customers(self, mock_session):
+        # Mock query results
         mock_customer1 = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_customer2 = Customer(id=2, name='Bob Smith', email='bob@example.com')
         mock_session.query.return_value.all.return_value = [mock_customer1, mock_customer2]
@@ -33,6 +34,7 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_find_customer_by_id(self, mock_session):
+        # Mock query result
         mock_customer = Customer(id=1, name='Alice Johnson', email='alice@example.com')
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_customer
 
@@ -44,6 +46,7 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_create_customer(self, mock_session):
+        # Mock input and expected behavior
         mock_customer_data = {'name': 'Alice Johnson', 'email': 'alice.johnson@example.com'}
         mock_customer = Customer(id=1, **mock_customer_data)
 
