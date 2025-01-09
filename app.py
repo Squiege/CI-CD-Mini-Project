@@ -1,5 +1,5 @@
 # Importing the necessary libraries
-from flask import Flask
+from flask import Flask, jsonify
 from database import db
 from schema import ma
 from limiter import limiter
@@ -42,7 +42,19 @@ def create_app(config=DevelopmentConfig):
     ma.init_app(app)
     limiter.init_app(app)  
     blue_print_config(app)  
-    configure_rate_limit()  
+    configure_rate_limit()
+
+    @app.route('/routes', methods=['GET'])
+    def list_routes():
+        routes = []
+        for rule in app.url_map.iter_rules():
+            routes.append({
+                "endpoint": rule.endpoint,
+                "methods": list(rule.methods),
+                "url": str(rule)
+            })
+        return jsonify(routes)
+
     return app
 
 def blue_print_config(app):
