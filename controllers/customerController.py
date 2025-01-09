@@ -11,12 +11,12 @@ def create_customer():
 
 # Get all customers
 def get_customers():
-    result = customerService.get_customers()
+    result = customerService.find_all_customers()
     return jsonify(result)
 
 # Get a customer by ID
 def get_customer_by_id(customer_id):
-    result = customerService.get_customer_by_id(customer_id)
+    result = customerService.find_customer_by_id(customer_id)
     return jsonify(result)
 
 # Update a customer by ID

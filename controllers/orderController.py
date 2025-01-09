@@ -10,12 +10,12 @@ def create_order():
 
 # Get all orders
 def get_orders():
-    orders = orderService.get_orders()
+    orders = orderService.find_all_orders()
     return jsonify(orders)
 
 # Get a single order
 def get_order(order_id):
-    order = orderService.get_order(order_id)
+    order = orderService.find_order_by_id(order_id)
     return jsonify(order)
 
 # Update an order

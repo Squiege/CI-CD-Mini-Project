@@ -10,12 +10,12 @@ def create_product():
 
 # Get all products
 def get_products():
-    products = productService.get_products()
+    products = productService.find_all_products()
     return jsonify(products)
 
 # Get a single product
 def get_product(product_id):
-    product = productService.get_product(product_id)
+    product = productService.find_product_by_id(product_id)
     return jsonify(product)
 
 # Update a product
