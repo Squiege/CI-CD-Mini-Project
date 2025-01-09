@@ -3,7 +3,7 @@ from controllers.customerAccountController import find_all, find_by_id, delete_b
 
 customer_account_blue_print = Blueprint('customer_account', __name__)
 
-customer_account_blue_print.route('/customer-accounts', methods=['GET'])(find_all)
+customer_account_blue_print.route('/', methods=['GET'])(find_all)
 customer_account_blue_print.route('/<id>', methods=['GET'])(find_by_id)
 customer_account_blue_print.route('/delete/<id>', methods=['DELETE'])(delete_by_id)
 customer_account_blue_print.route('/create', methods=['POST'])(create)
