@@ -24,25 +24,29 @@ from models.customer import Customer
 from models.role import Role
 from models.customerManagementRole import CustomerManagementRole
 
+# Swagger configuration
 SWAGGER_URL = '/api/docs'
 API_URL = '/static/swagger.yaml'
 
 swagger_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={
-        'app_name': "m13_mp"
-    }
+    config={'app_name': "m13_mp"}
 )
 
-def create_app(config):
+def create_app(config=DevelopmentConfig):
+    """Factory function to create and configure the Flask app."""
     app = Flask(__name__)
     app.config.from_object(config)
     db.init_app(app)
     ma.init_app(app)
+    limiter.init_app(app)  
+    blue_print_config(app)  
+    configure_rate_limit()  
     return app
 
 def blue_print_config(app):
+    """Register blueprints."""
     app.register_blueprint(customer_account_blue_print, url_prefix='/api/customer-accounts')
     app.register_blueprint(order_blue_print, url_prefix='/api/orders')
     app.register_blueprint(product_blue_print, url_prefix='/api/products')
@@ -50,12 +54,14 @@ def blue_print_config(app):
     app.register_blueprint(swagger_blueprint, url_prefix=SWAGGER_URL)
 
 def configure_rate_limit():
+    """Configure rate limits for blueprints."""
     limiter.limit("100 per day")(customer_account_blue_print)
     limiter.limit("100 per day")(order_blue_print)
     limiter.limit("100 per day")(product_blue_print)
     limiter.limit("100 per day")(customer_blue_print)
 
 def init_roles_data():
+    """Initialize roles data."""
     with Session(db.engine) as session:
         with session.begin():
             roles = [
@@ -67,10 +73,9 @@ def init_roles_data():
             print("Roles initialized successfully.")
 
 def init_customers_info_data():
-    # Ensure Customer records are created first
+    """Initialize customer and customer account data."""
     with Session(db.engine) as session:
         with session.begin():
-            # Add Customer records
             customers = [
                 Customer(id=1, name='Customer 1', email='customer1@example.com'),
                 Customer(id=2, name='Customer 2', email='customer2@example.com'),
@@ -78,18 +83,16 @@ def init_customers_info_data():
             ]
             session.add_all(customers)
 
-            # Add CustomerAccount records referencing Customer IDs
             customer_accounts = [
                 CustomerAccount(id=1, customer_id=1, username='ctm1', password='1234'),
                 CustomerAccount(id=2, customer_id=2, username='ctm2', password='1234'),
                 CustomerAccount(id=3, customer_id=3, username='ctm3', password='1234')
             ]
             session.add_all(customer_accounts)
-
             print("Customers and Customer accounts initialized successfully.")
 
-
 def init_roles_customers_data():
+    """Initialize customer management roles data."""
     with Session(db.engine) as session:
         with session.begin():
             roles_customers = [
@@ -100,12 +103,11 @@ def init_roles_customers_data():
             session.add_all(roles_customers)
             print("Customer management roles initialized successfully.")
 
+
+app = create_app()
+
+
 if __name__ == '__main__':
-    app = create_app(DevelopmentConfig)
-
-    blue_print_config(app)
-    configure_rate_limit()
-
     with app.app_context():
         db.drop_all()
         db.create_all()

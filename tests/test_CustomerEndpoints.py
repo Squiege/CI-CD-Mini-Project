@@ -5,19 +5,19 @@ from services.customerService import (
     find_customer_by_id,
     find_all_customers,
     update_customer,
-    delete_customer,  
+    delete_customer,
 )
 from models.customer import Customer
-from flask import current_app as app
+from app import app 
 
 
 class TestCustomerService(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()
+        self.app_context = app.app_context()  
         self.app_context.push()
 
     def tearDown(self):
-        self.app_context.pop()
+        self.app_context.pop()  
 
     @patch('services.customerService.db.session')  
     def test_find_all_customers(self, mock_session):

@@ -5,19 +5,19 @@ from services.orderService import (
     find_order_by_id,
     find_all_orders,
     update_order,
-    delete_order,  
+    delete_order,
 )
 from models.order import Order
-from flask import current_app as app
+from app import app  
 
 
 class TestOrderService(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()
+        self.app_context = app.app_context()  
         self.app_context.push()
 
     def tearDown(self):
-        self.app_context.pop()
+        self.app_context.pop()  
 
     @patch('services.orderService.db.session')  
     def test_find_all_orders(self, mock_session):

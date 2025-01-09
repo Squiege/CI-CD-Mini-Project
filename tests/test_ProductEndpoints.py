@@ -1,20 +1,26 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from services.productService import create_product, find_product_by_id, find_all_products, update_product, delete_product
+from services.productService import (
+    create_product,
+    find_product_by_id,
+    find_all_products,
+    update_product,
+    delete_product,
+)
 from models.product import Product
-from flask import current_app as app
+from app import app  
+
 
 class TestProductService(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()
+        self.app_context = app.app_context()  
         self.app_context.push()
 
     def tearDown(self):
-        self.app_context.pop()
+        self.app_context.pop() 
 
-    @patch('services.productService.db.session')  
+    @patch('services.productService.db.session') 
     def test_find_all_products(self, mock_session):
-        # Mock query result
         mock_product1 = Product(id=1, name='Product A', price=10.99)
         mock_product2 = Product(id=2, name='Product B', price=20.99)
         mock_session.query.return_value.all.return_value = [mock_product1, mock_product2]
@@ -25,9 +31,8 @@ class TestProductService(unittest.TestCase):
         self.assertEqual(products[0].name, 'Product A')
         self.assertEqual(products[1].price, 20.99)
 
-    @patch('services.productService.db.session')  
+    @patch('services.productService.db.session') 
     def test_find_product_by_id(self, mock_session):
-        # Mock query result
         mock_product = Product(id=1, name='Product A', price=10.99)
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_product
 
@@ -37,9 +42,8 @@ class TestProductService(unittest.TestCase):
         self.assertEqual(product.name, 'Product A')
         self.assertEqual(product.price, 10.99)
 
-    @patch('services.productService.db.session')  
+    @patch('services.productService.db.session') 
     def test_create_product(self, mock_session):
-        # Mock product data
         mock_product_data = {'name': 'Product A', 'price': 10.99}
         mock_product = Product(id=1, **mock_product_data)
 
@@ -58,11 +62,9 @@ class TestProductService(unittest.TestCase):
 
     @patch('services.productService.db.session')  
     def test_update_product(self, mock_session):
-        # Mock existing product
         mock_existing_product = Product(id=1, name='Product A', price=10.99)
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_product
 
-        # New product data
         new_product_data = {'name': 'Updated Product', 'price': 15.99}
 
         updated_product = update_product(1, new_product_data)
@@ -73,7 +75,6 @@ class TestProductService(unittest.TestCase):
 
     @patch('services.productService.db.session')  
     def test_delete_product(self, mock_session):
-        # Mock existing product
         mock_existing_product = Product(id=1, name='Product A', price=10.99)
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_existing_product
 
@@ -81,6 +82,7 @@ class TestProductService(unittest.TestCase):
 
         mock_session.delete.assert_called_once_with(mock_existing_product)
         mock_session.commit.assert_called_once()
+
 
 if __name__ == '__main__':
     unittest.main()
