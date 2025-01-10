@@ -44,6 +44,11 @@ def create_app(config=DevelopmentConfig):
     blue_print_config(app)  
     configure_rate_limit()
 
+    with app.app_context():
+        initialize_database()
+
+    return app
+
     # Get all routes
     @app.route('/routes', methods=['GET'])
     def list_routes():
@@ -130,7 +135,7 @@ def test_database_connection(uri):
 app = create_app()
 
 
-if __name__ == '__main__':
+def initialize_database():
     with app.app_context():
         db.drop_all()
         print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
