@@ -2,7 +2,7 @@ from sqlalchemy import String, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import Base, db
 
-class Customer(db.Model):
+class Customer(Base):
     __tablename__ = 'customers'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
