@@ -78,32 +78,42 @@ def init_roles_data():
     """Initialize roles data."""
     with Session(db.engine) as session:
         with session.begin():
-            roles = [
-                Role(id=1, role_name='Admin'),
-                Role(id=2, role_name='Manager'),
-                Role(id=3, role_name='User')
-            ]
-            session.add_all(roles)
-            print("Roles initialized successfully.")
+            existing_roles = session.query(Role).all()
+            if not existing_roles:  # Only insert if no roles exist
+                roles = [
+                    Role(id=1, role_name='Admin'),
+                    Role(id=2, role_name='Manager'),
+                    Role(id=3, role_name='User')
+                ]
+                session.add_all(roles)
+                print("Roles initialized successfully.")
+            else:
+                print("Roles already exist, skipping initialization.")
+
 
 def init_customers_info_data():
     """Initialize customer and customer account data."""
     with Session(db.engine) as session:
         with session.begin():
-            customers = [
-                Customer(id=1, name='Customer 1', email='customer1@example.com'),
-                Customer(id=2, name='Customer 2', email='customer2@example.com'),
-                Customer(id=3, name='Customer 3', email='customer3@example.com')
-            ]
-            session.add_all(customers)
+            existing_customers = session.query(Customer).all()
+            if not existing_customers:  # Insert only if no customers exist
+                customers = [
+                    Customer(id=1, name='Customer 1', email='customer1@example.com'),
+                    Customer(id=2, name='Customer 2', email='customer2@example.com'),
+                    Customer(id=3, name='Customer 3', email='customer3@example.com')
+                ]
+                session.add_all(customers)
 
-            customer_accounts = [
-                CustomerAccount(id=1, customer_id=1, username='ctm1', password='1234'),
-                CustomerAccount(id=2, customer_id=2, username='ctm2', password='1234'),
-                CustomerAccount(id=3, customer_id=3, username='ctm3', password='1234')
-            ]
-            session.add_all(customer_accounts)
-            print("Customers and Customer accounts initialized successfully.")
+                customer_accounts = [
+                    CustomerAccount(id=1, customer_id=1, username='ctm1', password='1234'),
+                    CustomerAccount(id=2, customer_id=2, username='ctm2', password='1234'),
+                    CustomerAccount(id=3, customer_id=3, username='ctm3', password='1234')
+                ]
+                session.add_all(customer_accounts)
+                print("Customers and Customer accounts initialized successfully.")
+            else:
+                print("Customers already exist, skipping initialization.")
+
 
 def init_roles_customers_data():
     """Initialize customer management roles data."""
