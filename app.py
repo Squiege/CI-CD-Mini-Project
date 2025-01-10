@@ -34,6 +34,7 @@ swagger_blueprint = get_swaggerui_blueprint(
     config={'app_name': "m13_mp"}
 )
 
+
 def create_app(config=DevelopmentConfig):
     """Factory function to create and configure the Flask app."""
     app = Flask(__name__)

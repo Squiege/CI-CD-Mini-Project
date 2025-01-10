@@ -1,12 +1,14 @@
-from database import db, Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy.orm import relationship
+from database import Base
 
 class Product(Base):
     __tablename__ = 'products'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    price: Mapped[float] = mapped_column(db.Float, nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False)
+    price = Column(Float, nullable=False)
 
     # Relationships
-    orders: Mapped[list['Order']] = relationship('Order', back_populates='product')
+    orders = relationship('Order', back_populates='product')
+

@@ -21,7 +21,6 @@ def find_customer_by_id(customer_id):
 def create_customer(data):
     try:
         new_customer = Customer(name=data['name'], email=data['email'])
-
         db.session.add(new_customer)
         db.session.commit()
         db.session.refresh(new_customer)

@@ -1,15 +1,17 @@
-from database import db, Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, Integer, ForeignKey, Float
+from sqlalchemy.orm import relationship
+from database import Base
 
 class Order(Base):
     __tablename__ = 'orders'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    customer_id: Mapped[int] = mapped_column(db.ForeignKey('customers.id'), nullable=False)
-    product_id: Mapped[int] = mapped_column(db.ForeignKey('products.id'), nullable=False)
-    quantity: Mapped[int] = mapped_column(nullable=False)
-    total_price: Mapped[float] = mapped_column(nullable=False)
+    id = Column(Integer, primary_key=True)
+    customer_id = Column(Integer, ForeignKey('customers.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    quantity = Column(Integer, nullable=False)
+    total_price = Column(Float, nullable=False)
 
     # Relationships
-    customer: Mapped['Customer'] = relationship('Customer', back_populates='orders')
-    product: Mapped['Product'] = relationship('Product', back_populates='orders')
+    customer = relationship('Customer', back_populates='orders')
+    product = relationship('Product', back_populates='orders')
+
