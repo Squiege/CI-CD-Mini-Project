@@ -21,17 +21,22 @@ class TestCustomerService(unittest.TestCase):
 
     @patch('services.customerService.db.session')
     def test_find_all_customers(self, mock_session):
-        # Mock customers to be returned from the database
+    
         mock_customer1 = MagicMock(id=1, name="Alice Johnson", email="alice@example.com")
         mock_customer2 = MagicMock(id=2, name="Bob Smith", email="bob@example.com")
+        mock_customers = [mock_customer1, mock_customer2]
 
-        mock_session.query.return_value.all.return_value = [mock_customer1, mock_customer2]
+    
+        mock_session.execute.return_value.scalars.return_value.all.return_value = mock_customers
 
+    
         customers = find_all_customers()
 
+    
         assert len(customers) == 2
         assert customers[0].name == "Alice Johnson"
         assert customers[1].email == "bob@example.com"
+
 
 
     @patch('services.customerService.db.session')
