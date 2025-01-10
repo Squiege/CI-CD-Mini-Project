@@ -1,14 +1,14 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
-from database import Base
+from sqlalchemy import String, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from database import Base, db
 
 class Customer(Base):
     __tablename__ = 'customers'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255), nullable=False, unique=True)
-    email = Column(String(320), nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
+    email: Mapped[str] = mapped_column(String(320), nullable=False)
 
     # Relationships
-    orders = relationship('Order', back_populates='customer')
-    customer_account = relationship('CustomerAccount', back_populates='customer')
+    orders: Mapped[list['Order']] = relationship('Order', back_populates='customer')
+    customer_account: Mapped['CustomerAccount'] = relationship('CustomerAccount', back_populates='customer')
