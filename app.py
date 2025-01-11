@@ -144,10 +144,10 @@ app = create_app()
 with app.app_context():
     db.drop_all()
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-    db.create_all()
-    init_roles_data()
-    init_customers_info_data()
-    init_roles_customers_data()
+    # db.create_all()
+    # init_roles_data()
+    # init_customers_info_data()
+    # init_roles_customers_data()
 
 # if __name__ == '__main__':
 #     with app.app_context():
@@ -158,4 +158,4 @@ with app.app_context():
 #         init_customers_info_data()
 #         init_roles_customers_data()
 
-#     app.run(debug=True)
+    # app.run(debug=True)
