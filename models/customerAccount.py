@@ -10,5 +10,5 @@ class CustomerAccount(Base):
     password: Mapped[str] = mapped_column(db.String(80), nullable=False)
 
     # Relationships
-    customer: Mapped['Customer'] = relationship('Customer', back_populates='customer_account')
-    roles: Mapped[list['CustomerManagementRole']] = relationship('CustomerManagementRole', back_populates='customer_account')
+    customer: Mapped['Customer'] = db.relationship('Customer', back_populates='customer_account')
+    roles: Mapped[list['CustomerManagementRole']] = db.relationship('CustomerManagementRole', back_populates='customer_account')

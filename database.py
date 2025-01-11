@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
-
-db = SQLAlchemy()
+class Base(DeclarativeBase):
+    pass
+db = SQLAlchemy(model_class=Base)
