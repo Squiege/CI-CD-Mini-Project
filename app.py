@@ -42,15 +42,15 @@ def create_app(config=DevelopmentConfig):
     db.init_app(app)
     ma.init_app(app)
     limiter.init_app(app)  
-    # with app.app_context():
-    #     db.drop_all()
-    #     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-    #     db.create_all()
-    #     init_roles_data()
-    #     init_customers_info_data()
-    #     init_roles_customers_data()
     blue_print_config(app)  
     configure_rate_limit()
+    with app.app_context():
+        db.drop_all()
+        print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+        db.create_all()
+        init_roles_data()
+        init_customers_info_data()
+        init_roles_customers_data()
 
     # Get all routes
     @app.route('/routes', methods=['GET'])
