@@ -42,6 +42,13 @@ def create_app(config=DevelopmentConfig):
     db.init_app(app)
     ma.init_app(app)
     limiter.init_app(app)  
+    # with app.app_context():
+    #     db.drop_all()
+    #     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    #     db.create_all()
+    #     init_roles_data()
+    #     init_customers_info_data()
+    #     init_roles_customers_data()
     blue_print_config(app)  
     configure_rate_limit()
 
@@ -57,15 +64,6 @@ def create_app(config=DevelopmentConfig):
             })
         return jsonify(routes)
 
-    with app.app_context():
-        db.drop_all()
-        print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-        db.create_all()
-        init_roles_data()
-        init_customers_info_data()
-        init_roles_customers_data()
-
-    app.run(debug=True)
 
     return app
 
@@ -151,3 +149,13 @@ def test_database_connection(uri):
 app = create_app()
 
 
+# if __name__ == '__main__':
+#     with app.app_context():
+#         db.drop_all()
+#         print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+#         db.create_all()
+#         init_roles_data()
+#         init_customers_info_data()
+#         init_roles_customers_data()
+
+#     app.run(debug=True)
